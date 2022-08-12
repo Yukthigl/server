@@ -1,0 +1,36 @@
+version: '3.8'
+services:
+  
+  dbs:
+    
+    image: sushmithabkongi/postgres_v_01:postgres_V_1.0
+    container_name: postgres
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=serverproject
+    
+    networks:
+      - app-network
+    ports:
+      - '5432:5432'
+
+  go:
+
+    image: sushmithabkongi/golang-api:api_V_1.0
+    container_name: golang
+    
+    ports:
+      - 5002:5002
+    volumes:
+      - ./:/app
+    networks:
+      - app-network
+    depends_on:
+      - postgres
+    restart: always 
+
+networks:
+  app-network:
+    name: app-network
